@@ -10,7 +10,7 @@ if __name__ == '__main__':
     task_list = db.get_all(sql=check_sql)
     now_time = dc.get_now()
     for task in task_list:
-        get_last_info = f"select checkDatetime,folderSize,fileNumber from dbBackup_history where taskId = {task['id']} and isNormal = 1 order by id desc"
+        get_last_info = f"select checkDatetime,folderSize,fileNumber from dbBack_history where taskId = {task['id']} and isNormal = 1 order by id desc"
         # 获取上次文件备份的信息
         last_info = db.get_one(sql=get_last_info)
         folderSize = gf.get_dir_size(task['filePath'])
@@ -35,6 +35,6 @@ if __name__ == '__main__':
                 errorResson = '文件夹不存在'
             if errorResson:
                 isNormal = 0
-        ins_check_ret_sql = f"insert into dbBackup_history(taskId, checkDatetime, folderSize, fileNumber, isNormal, errorResson) value (%s,%s,%s,%s,%s,%s,%s)"
+        ins_check_ret_sql = f"insert into dbBack_history(taskId, checkDatetime, folderSize, fileNumber, isNormal, errorResson) value (%s,%s,%s,%s,%s,%s,%s)"
         data = [task['id'], now_time, folderSize, fileNumber, isNormal, errorResson]
         db.insert(ins_check_ret_sql, data)
