@@ -20,14 +20,14 @@ if __name__ == '__main__':
         # 如果有上次记录，则进行对比。没有则直接记录
         if last_info:
             if gf.check_path_exist(task['filePath']):
-                if abs(folderSize - task['folderSize']) / task['folderSize'] > 0.05:
+                if abs(folderSize - last_info['folderSize']) / last_info['folderSize'] > 0.05:
                     errorReason += '备份文件目录大小异常'
-                if len(fileInfo['file_num']) != task['fileNumber']:
+                if len(fileInfo['file_num']) != last_info['fileNumber']:
                     errorReason += '备份文件目录数量异常'
                 mtime_check = []
                 for fileName in fileInfo['file_list']:
                     fileMtime = gf.get_file_mtime(task['filePath'], fileName)
-                    if dc.date_calc(fileMtime, task['checkDatetime'], task['copyPeriod']):
+                    if dc.date_calc(fileMtime, last_info['checkDatetime'], task['copyPeriod']):
                         mtime_check.append(1)
                 if not mtime_check:
                     errorReason += '没有生成任何备份文件'
