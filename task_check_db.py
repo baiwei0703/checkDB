@@ -14,7 +14,7 @@ if __name__ == '__main__':
         # 获取上次文件备份的信息
         last_info = db.get_one(sql=get_last_info)
         folderSize = gf.get_dir_size(task['filePath'])
-        fileNumber, fileList = gf.get_dir_file_number(task['filePath'])
+        fileInfo = gf.get_dir_file_number(task['filePath'])
         isNormal = 1
         errorResson = ''
         # 如果有上次记录，则进行对比。没有则直接记录
@@ -22,10 +22,10 @@ if __name__ == '__main__':
             if gf.check_path_exist(task['filePath']):
                 if abs(folderSize - task['folderSize']) / task['folderSize'] > 0.05:
                     errorResson += '备份文件目录大小异常'
-                if len(fileNumber) != task['fileNumber']:
+                if len(fileInfo['file_num']) != task['fileNumber']:
                     errorResson += '备份文件目录数量异常'
                 mtime_check = []
-                for fileName in fileList:
+                for fileName in fileInfo['file_list']:
                     fileMtime = gf.get_file_mtime(task['filePath'], fileName)
                     if dc.date_calc(fileMtime, task['checkDatetime'], task['copyPeriod']):
                         mtime_check.append(1)
@@ -36,5 +36,5 @@ if __name__ == '__main__':
             if errorResson:
                 isNormal = 0
         ins_check_ret_sql = f"insert into dbBack_history(taskId, checkDatetime, folderSize, fileNumber, isNormal, errorResson) value (%s,%s,%s,%s,%s,%s,%s)"
-        data = [task['id'], now_time, folderSize, fileNumber, isNormal, errorResson]
+        data = [task['id'], now_time, folderSize, fileInfo['fileNumber'], isNormal, errorResson]
         db.insert(ins_check_ret_sql, data)
