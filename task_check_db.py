@@ -38,4 +38,5 @@ if __name__ == '__main__':
         ins_check_ret_sql = f"insert into dbBack_history(taskId, checkDatetime, folderSize, fileNumber, isNormal, errorResson) value (%s,%s,%s,%s,%s,%s)"
         data = [task['id'], now_time, folderSize, fileInfo['file_num'], isNormal, errorResson]
         print(data)
-        # db.insert(ins_check_ret_sql, data)
+        db.insert(ins_check_ret_sql, data)
+        db.end()
