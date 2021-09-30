@@ -35,6 +35,7 @@ if __name__ == '__main__':
                 errorResson = '文件夹不存在'
             if errorResson:
                 isNormal = 0
-        ins_check_ret_sql = f"insert into dbBack_history(taskId, checkDatetime, folderSize, fileNumber, isNormal, errorResson) value (%s,%s,%s,%s,%s,%s,%s)"
+        ins_check_ret_sql = f"insert into dbBack_history(taskId, checkDatetime, folderSize, fileNumber, isNormal, errorResson) value (%s,%s,%s,%s,%s,%s)"
         data = [task['id'], now_time, folderSize, fileInfo['file_num'], isNormal, errorResson]
+        print(data)
         # db.insert(ins_check_ret_sql, data)
